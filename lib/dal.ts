@@ -2,12 +2,14 @@ import { db } from '@/db'
 import { getSession } from './auth'
 import { eq } from 'drizzle-orm'
 import { cache } from 'react'
+import { unstable_cacheTag as cacheTag } from 'next/cache'
 import { issues, users } from '@/db/schema'
 import { mockDelay } from './utils'
 
 // dal is data access layer -- used for fetch or getting data?
 
-export const getCurrentUser = async () => {
+export const getCurrentUser = cache(async () => {
+  console.log('get current user')
   const session = await getSession()
 
   if (!session) {
@@ -25,7 +27,7 @@ export const getCurrentUser = async () => {
     console.error('Error getting user by ID:', e)
     return null
   }
-}
+})
 
 export const getUserByEmail = async (email: string) => {
   try {
@@ -41,6 +43,8 @@ export const getUserByEmail = async (email: string) => {
 }
 
 export async function getIssues() {
+  'use cache'
+  cacheTag('issues')
   try {
     await mockDelay(1000)
     const result = await db.query.issues.findMany({
@@ -59,7 +63,7 @@ export async function getIssues() {
 export const getIssue = async (id: number) => {
   try {
     await mockDelay(700)
-    const issue = await db.query.issues.findFirst({ 
+    const issue = await db.query.issues.findFirst({
       where: eq(issues.id, id),
       with: {
         user: true,
