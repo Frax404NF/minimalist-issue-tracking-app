@@ -9,7 +9,6 @@ import { mockDelay } from './utils'
 // dal is data access layer -- used for fetch or getting data?
 
 export const getCurrentUser = cache(async () => {
-  console.log('get current user')
   const session = await getSession()
 
   if (!session) {

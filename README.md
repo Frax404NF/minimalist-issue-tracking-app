@@ -9,6 +9,14 @@ A project management application built with Next.js, inspired by Linear.
 - Modern UI with Tailwind CSS
 - Responsive design
 
+## Preview
+
+**Main Page**
+![Main Page](./public/readme-assets/main-page.png)
+
+**Dashboard**
+![Dashboard](./public/readme-assets/dashboard.png)
+
 ## Tech Stack
 
 - [Next.js 13+](https://nextjs.org/) with App Router
