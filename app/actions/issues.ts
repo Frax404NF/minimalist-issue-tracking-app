@@ -34,3 +34,47 @@ export type ActionResponse = {
   errors?: Record<string, string[]>
   error?: string
 }
+
+export const createIssue = async (data: IssueData): Promise<ActionResponse> => {
+  try {
+    const user = await getCurrentUser()
+    if (!user) {
+      return {
+        success: false,
+        message: 'Unauthorized access',
+        error: 'Unauthorized',
+      }
+    }
+
+    const validationResult = IssueSchema.safeParse(data)
+    if (!validationResult.success) {
+      return {
+        success: false,
+        message: 'Validation failed',
+        errors: validationResult.error.flatten().fieldErrors,
+      }
+    }
+
+    const validatedData = validationResult.data
+    await db.insert(issues).values({
+      title: validatedData.title,
+      description: validatedData.description || null,
+      status: validatedData.status,
+      priority: validatedData.priority,
+      userId: validatedData.userId,
+    })
+
+    return { success: true, message: 'Issue created successfully' }
+  } catch (error) {
+    console.error('Error creating issue:', error)
+    return {
+      success: false,
+      message: 'An error occurred while creating the issue',
+      error: 'Failed to create issue',
+    }
+  }
+}
+
+export const updateIssue = async () => {
+  
+ }
