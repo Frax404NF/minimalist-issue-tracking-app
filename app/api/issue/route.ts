@@ -2,6 +2,8 @@ import { NextResponse } from 'next/server'
 import { db } from '@/db'
 import { issues } from '@/db/schema'
 
+export const dynamic = 'force-dynamic'
+
 export async function GET() {
   try {
     const allIssues = await db.query.issues.findMany()
