@@ -65,6 +65,7 @@ export const createIssue = async (data: IssueData): Promise<ActionResponse> => {
       userId: validatedData.userId,
     })
 
+    // @ts-expect-error - Next.js Canary type definition expects 2 arguments but functions with 1
     revalidateTag('issues')
     return { success: true, message: 'Issue created successfully' }
   } catch (error) {
